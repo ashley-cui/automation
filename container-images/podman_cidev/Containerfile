@@ -1,4 +1,4 @@
-ARG BASE_NAME=fedora
+ARG BASE_NAME=registry.fedoraproject.org/fedora
 ARG BASE_TAG=latest
 ARG BUILD_NAME=fedora-current
 FROM ${BASE_NAME}:${BASE_TAG}

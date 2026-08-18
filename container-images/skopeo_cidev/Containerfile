@@ -1,4 +1,4 @@
-ARG BASE_NAME=fedora
+ARG BASE_NAME=registry.fedoraproject.org/fedora
 ARG BASE_TAG=latest
 FROM ${BASE_NAME}:${BASE_TAG}
 
