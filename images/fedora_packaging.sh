@@ -86,7 +86,6 @@ INSTALL_PACKAGES=(\
     libffi-devel
     libgpg-error-devel
     libkrunfw
-    libmsi1
     libnet
     libnet-devel
     libnl3-devel
@@ -99,7 +98,6 @@ INSTALL_PACKAGES=(\
     lsof
     make
     man-db
-    msitools
     nfs-utils
     nmap-ncat
     openssl
