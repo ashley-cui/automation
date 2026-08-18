@@ -170,14 +170,9 @@ if [[ "$BUILD_NAME" != "fedora-rawhide" ]]; then
     )
 
     if ! ((CONTAINER)); then
-        # Extra packages needed by podman-machine-os
+        # Extra package needed by podman
         INSTALL_PACKAGES+=( \
             podman-machine
-            osbuild
-            osbuild-tools
-            osbuild-ostree
-            xfsprogs
-            e2fsprogs
         )
     fi
 fi
