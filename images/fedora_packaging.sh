@@ -86,7 +86,6 @@ INSTALL_PACKAGES=(\
     libffi-devel
     libgpg-error-devel
     libkrunfw
-    libkrunfw-sev
     libmsi1
     libnet
     libnet-devel
@@ -181,6 +180,11 @@ if [[ "$BUILD_NAME" != "fedora-rawhide" ]]; then
             e2fsprogs
         )
     fi
+fi
+
+if [[ "$(arch)" == "x86_64" ]]; then
+    # libkrunfw-sev only exists for x86_64
+    INSTALL_PACKAGES+=(libkrunfw-sev)
 fi
 
 # When installing during a container-build, having this present
