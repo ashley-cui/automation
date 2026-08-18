@@ -21,13 +21,20 @@ jobs:
         image:
           - "skopeo_cidev"
           - "podman_cidev"
+          - "podman-machine-os-ci"
         include:
           - image: skopeo_cidev
             context: container-images/skopeo_cidev
             file: container-images/skopeo_cidev/Containerfile
+            multiarch: false
           - image: podman_cidev
             context: .
             file: container-images/podman_cidev/Containerfile
+            multiarch: false
+          - image: podman-machine-os-ci
+            context: container-images/podman-machine-os-ci
+            file: container-images/podman-machine-os-ci/Containerfile
+            multiarch: true
     env:
       IMAGE: ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}:${{ inputs.tag }}
       CONTEXT: ${{ matrix.context }}
@@ -35,8 +42,17 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Install qemu-user-static
+        if: ${{ matrix.multiarch }}
+        run: sudo apt-get update && sudo apt-get install -y qemu-user-static
+
       - name: Build image
+        if: ${{ matrix.multiarch == false }}
         run: podman build -t "$IMAGE" -f "$CONTAINERFILE" "$CONTEXT"
+
+      - name: Build multi arch image
+        if: ${{ matrix.multiarch }}
+        run: podman build --platform=linux/amd64,linux/arm64 --manifest "$IMAGE" --jobs=2 -f "$CONTAINERFILE" "$CONTEXT"
 
       - name: Log in to ghcr.io
         if: ${{ inputs.push }}
@@ -45,6 +61,10 @@ jobs:
           REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: echo "$REGISTRY_PASSWORD" | podman login ghcr.io -u "$REGISTRY_USER" --password-stdin
 
+      - name: Push multi arch image
+        if: ${{ inputs.push && matrix.multiarch }}
+        run: podman manifest push --all "$IMAGE"
+
       - name: Push image
-        if: ${{ inputs.push }}
+        if: ${{ inputs.push && matrix.multiarch == false}}
         run: podman push "$IMAGE"

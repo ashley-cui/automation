@@ -86,8 +86,6 @@ INSTALL_PACKAGES=(\
     libffi-devel
     libgpg-error-devel
     libkrunfw
-    libkrunfw-sev
-    libmsi1
     libnet
     libnet-devel
     libnl3-devel
@@ -100,7 +98,6 @@ INSTALL_PACKAGES=(\
     lsof
     make
     man-db
-    msitools
     nfs-utils
     nmap-ncat
     openssl
@@ -171,16 +168,16 @@ if [[ "$BUILD_NAME" != "fedora-rawhide" ]]; then
     )
 
     if ! ((CONTAINER)); then
-        # Extra packages needed by podman-machine-os
+        # Extra package needed by podman
         INSTALL_PACKAGES+=( \
             podman-machine
-            osbuild
-            osbuild-tools
-            osbuild-ostree
-            xfsprogs
-            e2fsprogs
         )
     fi
+fi
+
+if [[ "$(arch)" == "x86_64" ]]; then
+    # libkrunfw-sev only exists for x86_64
+    INSTALL_PACKAGES+=(libkrunfw-sev)
 fi
 
 # When installing during a container-build, having this present
