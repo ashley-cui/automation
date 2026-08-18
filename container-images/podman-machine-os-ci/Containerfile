@@ -1,0 +1,10 @@
+ARG BASE_NAME=registry.fedoraproject.org/fedora
+ARG BASE_TAG=latest
+FROM ${BASE_NAME}:${BASE_TAG}
+
+RUN dnf -y update && \
+    dnf -y install git podman buildah gh \
+        curl jq koji zstd util-linux-core \
+        osbuild osbuild-tools osbuild-ostree \
+        xfsprogs e2fsprogs dosfstools e2fsprogs && \
+    dnf clean all
