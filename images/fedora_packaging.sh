@@ -126,6 +126,7 @@ INSTALL_PACKAGES=(\
     runc
     sed
     sequoia-sq
+    shared-mime-info
     ShellCheck
     skopeo
     socat
